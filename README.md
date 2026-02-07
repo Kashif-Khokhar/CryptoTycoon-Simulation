@@ -4,6 +4,8 @@ A professional-grade cryptocurrency trading simulator built with React and Vite.
 
 ![CryptoTycoon](https://img.shields.io/badge/React-18.2-blue) ![Vite](https://img.shields.io/badge/Vite-5.0-purple) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-cyan)
 
+🔗 **Live Demo**: [https://crypto-tycoon-simulation.vercel.app/](https://crypto-tycoon-simulation.vercel.app/)
+
 ## ✨ Features
 
 ### 🔴 Live Market Engine
