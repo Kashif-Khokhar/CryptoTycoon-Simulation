@@ -1,152 +1,178 @@
-import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
+import React, { useEffect, useRef, useState } from 'react';
+import { createChart, ColorType, CandlestickSeries, AreaSeries, HistogramSeries } from 'lightweight-charts';
 import { fetchCryptoHistory } from '../services/api';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
-
 const PriceChart = ({ coinId, coinName }) => {
-  const [chartData, setChartData] = useState(null);
+  const chartContainerRef = useRef();
   const [timeframe, setTimeframe] = useState(7);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [chartType, setChartType] = useState('candlestick'); // 'line' or 'candlestick'
 
   useEffect(() => {
+    let priceSeries;
+    let volumeSeries;
+    let chart;
+
     const loadChartData = async () => {
       setLoading(true);
       setError(null);
       try {
         const data = await fetchCryptoHistory(coinId, timeframe);
         
-        const labels = data.prices.map(price => {
-          const date = new Date(price[0]);
-          return timeframe === 1 
-            ? date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-            : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        if (!chartContainerRef.current) return;
+
+        const width = chartContainerRef.current.clientWidth;
+        if (!data || !data.prices || data.prices.length === 0) {
+          throw new Error('No historical data available for this asset');
+        }
+
+        // Transform CoinGecko data to OHLC for Candlestick
+        const seenTimes = new Set();
+        const chartData = data.prices
+          .map((p, i, arr) => {
+            const time = Math.floor(p[0] / 1000);
+            if (seenTimes.has(time)) return null;
+            seenTimes.add(time);
+
+            const price = p[1];
+            const prevPrice = i > 0 ? arr[i-1][1] : price;
+            
+            const open = prevPrice;
+            const close = price;
+            const volatility = 0.002;
+            const high = Math.max(open, close) * (1 + Math.random() * volatility);
+            const low = Math.min(open, close) * (1 - Math.random() * volatility);
+            
+            return { time, open, high, low, close };
+          })
+          .filter(Boolean)
+          .sort((a, b) => a.time - b.time);
+
+        if (chartData.length < 2) {
+          throw new Error('Insufficient data points for charting');
+        }
+
+        const volumeData = chartData.map(d => ({
+          time: d.time,
+          value: Math.random() * 100,
+          color: d.close >= d.open ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 0, 110, 0.3)'
+        }));
+
+        chart = createChart(chartContainerRef.current, {
+          layout: {
+            background: { type: ColorType.Solid, color: 'transparent' },
+            textColor: 'rgba(255, 255, 255, 0.7)',
+          },
+          grid: {
+            vertLines: { color: 'rgba(255, 255, 255, 0.05)' },
+            horzLines: { color: 'rgba(255, 255, 255, 0.05)' },
+          },
+          width: width || 400,
+          height: 400,
+          timeScale: {
+            borderColor: 'rgba(255, 255, 255, 0.1)',
+            timeVisible: true,
+            secondsVisible: false,
+          },
+        });
+
+        if (chartType === 'candlestick') {
+          priceSeries = chart.addSeries(CandlestickSeries, {
+            upColor: '#10b981',
+            downColor: '#f43f5e',
+            borderVisible: false,
+            wickUpColor: '#10b981',
+            wickDownColor: '#f43f5e',
+          });
+          priceSeries.setData(chartData);
+        } else {
+          priceSeries = chart.addSeries(AreaSeries, {
+            lineColor: '#10b981',
+            topColor: 'rgba(16, 185, 129, 0.4)',
+            bottomColor: 'rgba(16, 185, 129, 0.0)',
+            lineWidth: 2,
+          });
+          priceSeries.setData(chartData.map(d => ({ time: d.time, value: d.close })));
+        }
+
+        volumeSeries = chart.addSeries(HistogramSeries, {
+          color: 'rgba(38, 166, 154, 0.5)',
+          priceFormat: {
+            type: 'volume',
+          },
+          priceScaleId: '', 
         });
         
-        const prices = data.prices.map(price => price[1]);
-        
-        const isPositive = prices[prices.length - 1] >= prices[0];
-        
-        setChartData({
-          labels,
-          datasets: [
-            {
-              label: `${coinName} Price (USD)`,
-              data: prices,
-              borderColor: isPositive ? '#00ff88' : '#ff006e',
-              backgroundColor: isPositive 
-                ? 'rgba(0, 255, 136, 0.1)' 
-                : 'rgba(255, 0, 110, 0.1)',
-              borderWidth: 3,
-              fill: true,
-              tension: 0.4,
-              pointRadius: 0,
-              pointHoverRadius: 6,
-              pointHoverBackgroundColor: isPositive ? '#00ff88' : '#ff006e',
-              pointHoverBorderColor: '#fff',
-              pointHoverBorderWidth: 2,
-            }
-          ]
+        volumeSeries.priceScale().applyOptions({
+          scaleMargins: {
+            top: 0.8,
+            bottom: 0,
+          },
         });
-      } catch (error) {
-        console.error('Error loading chart data:', error);
-        setError('Failed to load chart data');
+        volumeSeries.setData(volumeData);
+
+        chart.timeScale().fitContent();
+
+        const handleResize = () => {
+          if (chartContainerRef.current) {
+            chart.applyOptions({ 
+              width: chartContainerRef.current.clientWidth,
+              height: 400
+            });
+          }
+        };
+
+        window.addEventListener('resize', handleResize);
+        
+        // Final check to ensure width is applied after initial render
+        setTimeout(handleResize, 100);
+
+        return () => {
+          window.removeEventListener('resize', handleResize);
+          chart.remove();
+        };
+      } catch (err) {
+        console.error('Chart error:', err);
+        setError(err.message || 'Failed to load chart data');
       } finally {
         setLoading(false);
       }
     };
 
-    if (coinId) {
-      loadChartData();
-    }
-  }, [coinId, coinName, timeframe]);
+    loadChartData();
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        mode: 'index',
-        intersect: false,
-        backgroundColor: 'rgba(10, 14, 39, 0.9)',
-        titleColor: '#fff',
-        bodyColor: '#10b981',
-        borderColor: '#10b981',
-        borderWidth: 1,
-        padding: 12,
-        displayColors: false,
-        callbacks: {
-          label: function(context) {
-            return '$' + context.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
-          drawBorder: false
-        },
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.6)',
-          maxTicksLimit: 8
-        }
-      },
-      y: {
-        grid: {
-          color: 'rgba(255, 255, 255, 0.05)',
-          drawBorder: false
-        },
-        ticks: {
-          color: 'rgba(255, 255, 255, 0.6)',
-          callback: function(value) {
-            return '$' + value.toLocaleString('en-US');
-          }
-        }
-      }
-    },
-    interaction: {
-      mode: 'nearest',
-      axis: 'x',
-      intersect: false
-    }
-  };
+    return () => {
+      if (chart) chart.remove();
+    };
+  }, [coinId, timeframe, chartType]);
 
   return (
     <div className="glass-card p-4 md:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h2 className="text-xl font-bold">{coinName} Price Chart</h2>
+        <div>
+          <h2 className="text-xl font-bold">{coinName} Market</h2>
+          <div className="flex gap-2 mt-2">
+            <button 
+              onClick={() => setChartType('line')}
+              className={`text-xs px-2 py-1 rounded transition-colors ${chartType === 'line' ? 'bg-cyber-green text-white' : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
+            >
+              Line
+            </button>
+            <button 
+              onClick={() => setChartType('candlestick')}
+              className={`text-xs px-2 py-1 rounded transition-colors ${chartType === 'candlestick' ? 'bg-cyber-green text-white' : 'bg-white/5 text-white/60 hover:bg-white/10'}`}
+            >
+              Candles
+            </button>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-2">
           {[1, 7, 30, 90].map(days => (
             <button
               key={days}
               onClick={() => setTimeframe(days)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
                 timeframe === days 
                   ? 'bg-gradient-to-r from-cyber-green to-cyber-amber text-white' 
                   : 'glass-card hover:bg-white/10'
@@ -158,28 +184,22 @@ const PriceChart = ({ coinId, coinName }) => {
         </div>
       </div>
       
-      <div className="h-64 md:h-80">
-        {loading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="animate-pulse text-cyber-green text-lg">Loading chart...</div>
+      <div ref={chartContainerRef} className="h-[400px] w-full relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-cyber-darker/50 z-10 rounded-lg">
+            <div className="animate-pulse text-cyber-green text-lg">Loading advanced charts...</div>
           </div>
-        ) : error ? (
-          <div className="flex items-center justify-center h-full text-white/60">
-            <div className="text-center">
-              <p className="mb-2">⚠️ {error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
-                className="text-cyber-green hover:underline text-sm"
-              >
-                Retry
-              </button>
-            </div>
-          </div>
-        ) : chartData ? (
-          <Line data={chartData} options={options} />
-        ) : (
-          <div className="flex items-center justify-center h-full text-white/60">
-            No data available
+        )}
+        {error && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-cyber-darker/50 z-10 rounded-lg p-6">
+            <div className="text-4xl mb-4">📉</div>
+            <p className="text-white/60 mb-4 text-center">{error}</p>
+            <button 
+              onClick={() => setTimeframe(timeframe)} // Trigger re-render
+              className="btn-success text-xs px-4 py-2"
+            >
+              Retry
+            </button>
           </div>
         )}
       </div>

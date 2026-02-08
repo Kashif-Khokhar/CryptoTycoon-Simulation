@@ -5,7 +5,13 @@ const MarketCard = ({ crypto }) => {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [transactionType, setTransactionType] = useState('buy');
-  const { buyCrypto, sellCrypto, balance, assets } = usePortfolio();
+  const { buyCrypto, sellCrypto, balance, assets, currency } = usePortfolio();
+
+  const getCurrencySymbol = () => {
+    if (currency === 'EUR') return '€';
+    if (currency === 'BTC') return '₿';
+    return '$';
+  };
 
   const priceChange = crypto.price_change_percentage_24h || 0;
   const isPositive = priceChange >= 0;
@@ -49,7 +55,7 @@ const MarketCard = ({ crypto }) => {
           </div>
         </div>
         <div className="text-right">
-          <div className="text-base md:text-lg font-bold text-white">${crypto.current_price.toLocaleString()}</div>
+          <div className="text-base md:text-lg font-bold text-white">{getCurrencySymbol()}{crypto.current_price.toLocaleString()}</div>
           <div className={`text-xs md:text-sm font-semibold flex items-center justify-end gap-1 ${isPositive ? 'text-cyber-green' : 'text-cyber-pink'}`}>
             {isPositive ? '↑' : '↓'} {Math.abs(crypto.price_change_percentage_24h).toFixed(2)}%
           </div>
@@ -113,12 +119,12 @@ const MarketCard = ({ crypto }) => {
               <div className="flex justify-between mb-2">
                 <span className="text-white/60">Total Cost:</span>
                 <span className="font-bold text-lg">
-                  ${(parseFloat(amount || 0) * crypto.current_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {getCurrencySymbol()}{(parseFloat(amount || 0) * crypto.current_price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-white/60">Available Balance:</span>
-                <span className="font-semibold text-cyber-green">${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <span className="font-semibold text-cyber-green">{getCurrencySymbol()}{balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
             </div>
 

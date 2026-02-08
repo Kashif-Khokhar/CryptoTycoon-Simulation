@@ -11,10 +11,47 @@ export const usePortfolio = () => {
 };
 
 export const PortfolioProvider = ({ children }) => {
-  const [balance, setBalance] = useState(10000); // Initial $10,000 USD
-  const [assets, setAssets] = useState([]); // { id, symbol, name, quantity, avgBuyPrice }
-  const [transactions, setTransactions] = useState([]); // Transaction history
-  const [marketPrices, setMarketPrices] = useState({}); // Current market prices
+  // Load initial state from local storage or use defaults
+  const [balance, setBalance] = useState(() => {
+    const saved = localStorage.getItem('crypto_sim_balance');
+    return saved !== null ? parseFloat(saved) : 10000;
+  });
+  
+  const [assets, setAssets] = useState(() => {
+    const saved = localStorage.getItem('crypto_sim_assets');
+    return saved !== null ? JSON.parse(saved) : [];
+  });
+  
+  const [transactions, setTransactions] = useState(() => {
+    const saved = localStorage.getItem('crypto_sim_transactions');
+    return saved !== null ? JSON.parse(saved) : [];
+  });
+  
+  const [marketPrices, setMarketPrices] = useState({});
+  const [currency, setCurrency] = useState(() => localStorage.getItem('crypto_sim_currency') || 'USD');
+  const [theme, setTheme] = useState(() => localStorage.getItem('crypto_sim_theme') || 'dark');
+
+  // Sync state to local storage
+  useEffect(() => {
+    localStorage.setItem('crypto_sim_balance', balance);
+  }, [balance]);
+
+  useEffect(() => {
+    localStorage.setItem('crypto_sim_assets', JSON.stringify(assets));
+  }, [assets]);
+
+  useEffect(() => {
+    localStorage.setItem('crypto_sim_transactions', JSON.stringify(transactions));
+  }, [transactions]);
+
+  useEffect(() => {
+    localStorage.setItem('crypto_sim_currency', currency);
+  }, [currency]);
+
+  useEffect(() => {
+    localStorage.setItem('crypto_sim_theme', theme);
+    document.documentElement.classList.toggle('light', theme === 'light');
+  }, [theme]);
 
   // Calculate total portfolio value
   const calculateNetWorth = () => {
@@ -23,6 +60,30 @@ export const PortfolioProvider = ({ children }) => {
       return total + (asset.quantity * currentPrice);
     }, 0);
     return balance + assetsValue;
+  };
+
+  // Calculate Advanced Analytics
+  const calculatePortfolioMetrics = () => {
+    const netWorth = calculateNetWorth();
+    const totalInvested = assets.reduce((sum, a) => sum + (a.quantity * a.avgBuyPrice), 0);
+    const totalProfit = netWorth - (totalInvested + balance);
+    
+    // Simple Volatility calculation (Standard deviation of daily returns would be better, 
+    // but for this MVP we'll use a simplified weighted asset volatility score)
+    const volatility = assets.reduce((v, a) => {
+      const weight = (a.quantity * (marketPrices[a.id] || 0)) / netWorth;
+      // Mock volatility for assets (BTC 2%, SOL 5%, etc.)
+      const assetVol = a.symbol === 'btc' ? 0.02 : a.symbol === 'eth' ? 0.04 : 0.06;
+      return v + (weight * assetVol);
+    }, 0) * 100;
+
+    const sharpeRatio = volatility > 0 ? (totalProfit / totalInvested) / (volatility / 100) : 0;
+
+    return {
+      volatility: volatility.toFixed(2),
+      sharpeRatio: sharpeRatio.toFixed(2),
+      totalProfit: totalProfit.toFixed(2)
+    };
   };
 
   // Calculate profit/loss for an asset
@@ -137,9 +198,14 @@ export const PortfolioProvider = ({ children }) => {
     assets,
     transactions,
     marketPrices,
+    currency,
+    theme,
+    setCurrency,
+    setTheme,
     setMarketPrices,
     calculateNetWorth,
     calculateProfitLoss,
+    calculatePortfolioMetrics,
     buyCrypto,
     sellCrypto
   };

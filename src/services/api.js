@@ -19,14 +19,14 @@ const MOCK_TOP_CRYPTOS = [
 ];
 
 const generateMockHistory = (basePrice, days) => {
-    const points = days === 1 ? 24 : days;
-    const interval = days === 1 ? 3600000 : 86400000;
+    const points = days * 24; // Hourly data points
+    const interval = 3600000; // 1 hour in ms
     const now = Date.now();
     const prices = [];
 
     for (let i = points; i >= 0; i--) {
         const time = now - (i * interval);
-        const randomChange = (Math.random() - 0.48) * 0.05; // biased slightly upwards
+        const randomChange = (Math.random() - 0.5) * 0.02; // More subtle changes
         const price = basePrice * (1 + randomChange);
         prices.push([time, price]);
     }

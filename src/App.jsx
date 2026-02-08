@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import { fetchTopCryptos } from './services/api';
+import { priceStreamService } from './services/PriceStreamService';
 import NetWorthCard from './components/NetWorthCard';
 import MarketCard from './components/MarketCard';
 import PortfolioTable from './components/PortfolioTable';
 import PriceChart from './components/PriceChart';
+import Leaderboard from './components/Leaderboard';
 import Background from './components/Background';
 
 const Dashboard = () => {
@@ -13,10 +15,12 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [selectedCrypto, setSelectedCrypto] = useState(null);
   const [isDemoMode, setIsDemoMode] = useState(false);
-  const portfolio = usePortfolio();
-  const setMarketPrices = portfolio?.setMarketPrices;
-
-  console.log('Dashboard Rendering', { loading, error, hasPortfolio: !!portfolio, isDemoMode });
+  
+  const { 
+    setMarketPrices, 
+    currency, setCurrency, 
+    theme, setTheme 
+  } = usePortfolio();
 
   useEffect(() => {
     const loadCryptos = async () => {
@@ -24,18 +28,23 @@ const Dashboard = () => {
         const data = await fetchTopCryptos(12);
         setCryptos(data);
         setIsDemoMode(data[0]?.isMock || false);
-        setSelectedCrypto(data[0]); // Default to Bitcoin
-        
-        // Update market prices in context
+        setSelectedCrypto(data[0]);
+
         const prices = {};
         data.forEach(crypto => {
           prices[crypto.id] = crypto.current_price;
         });
         setMarketPrices(prices);
+        
+        // Initialize WebSocket stream if not in demo mode
+        if (!data[0]?.isMock) {
+          priceStreamService.init(data);
+        }
+        
         setError(null);
       } catch (err) {
         console.error('Error loading cryptos:', err);
-        setError(`Failed to load cryptocurrency data: ${err.message || 'Unknown error'}. Please check your internet connection or try again later.`);
+        setError(`Failed to load data. Please check your connection.`);
       } finally {
         setLoading(false);
       }
@@ -43,29 +52,31 @@ const Dashboard = () => {
 
     loadCryptos();
 
-    // Poll for price updates every 60 seconds (reduced frequency to avoid rate limits)
-    const interval = setInterval(async () => {
-      try {
-        const data = await fetchTopCryptos(12);
-        setCryptos(data);
-        setIsDemoMode(data[0]?.isMock || false);
-        
-        const prices = {};
-        data.forEach(crypto => {
-          prices[crypto.id] = crypto.current_price;
-        });
-        setMarketPrices(prices);
-      } catch (error) {
-        console.error('Error updating prices:', error);
+    // Subscribe to live WebSocket updates
+    const unsubscribe = priceStreamService.subscribe((update) => {
+      setCryptos(prev => prev.map(c => 
+        c.id === update.id 
+          ? { ...c, current_price: update.price, price_change_percentage_24h: update.change }
+          : c
+      ));
+      
+      if (setMarketPrices) {
+        setMarketPrices(prev => ({
+          ...prev,
+          [update.id]: update.price
+        }));
       }
-    }, 60000);
+    });
 
-    return () => clearInterval(interval);
+    return () => {
+      unsubscribe();
+      priceStreamService.close();
+    };
   }, [setMarketPrices]);
 
   if (loading) {
     return (
-      <div className="min-h-screen relative overflow-hidden">
+      <div className="min-h-screen relative overflow-hidden bg-cyber-darker">
         <Background />
         <div className="relative z-10 min-h-screen flex items-center justify-center">
           <div className="text-center">
@@ -79,7 +90,7 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen relative overflow-hidden p-6">
+      <div className="min-h-screen relative overflow-hidden bg-cyber-darker p-6">
         <Background />
         <div className="relative z-10 min-h-screen flex items-center justify-center">
           <div className="glass-card p-8 max-w-md text-center">
@@ -99,21 +110,47 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className={`min-h-screen relative overflow-hidden ${theme === 'light' ? 'bg-slate-50 text-slate-900' : 'bg-cyber-darker text-white'}`}>
       <Background />
       <div className="relative z-10 p-4 md:p-6 max-w-7xl mx-auto">
         {/* Header */}
-        <header className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <header className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
           <div>
             <h1 className="text-3xl md:text-5xl font-bold text-gradient mb-2">CryptoTycoon</h1>
-            <p className="text-white/60 text-base md:text-lg">Professional Trading Simulator</p>
+            <p className={`${theme === 'light' ? 'text-slate-500' : 'text-white/60'} text-base md:text-lg`}>Professional Trading Simulator</p>
           </div>
-          {isDemoMode && (
-            <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center gap-2">
-              <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-              <span className="text-amber-500 font-semibold text-xs md:text-sm">Demo Mode (API Rate Limited)</span>
-            </div>
-          )}
+          
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Currency Selector */}
+            <select 
+              value={currency} 
+              onChange={(e) => setCurrency(e.target.value)}
+              className={`border rounded-lg px-3 py-1.5 text-sm font-semibold outline-none transition-all ${
+                theme === 'light' 
+                  ? 'bg-white border-slate-200 text-slate-900' 
+                  : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+              }`}
+            >
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="BTC">BTC (₿)</option>
+            </select>
+
+            {/* Theme Toggle */}
+            <button 
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 rounded-lg glass-card hover:bg-white/10 text-xl"
+            >
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
+
+            {isDemoMode && (
+              <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center gap-2">
+                <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                <span className="text-amber-500 font-semibold text-xs md:text-sm">Demo Mode (API Rate Limited)</span>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Net Worth Card */}
@@ -135,14 +172,15 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Price Chart */}
-          <div className="lg:col-span-1">
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
             {selectedCrypto && (
               <PriceChart 
                 coinId={selectedCrypto.id} 
                 coinName={selectedCrypto.name}
               />
             )}
+            <Leaderboard />
           </div>
         </div>
 
