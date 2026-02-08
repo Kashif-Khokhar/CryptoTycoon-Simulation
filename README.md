@@ -2,39 +2,30 @@
 
 A professional-grade cryptocurrency trading simulator built with React and Vite. This "FinTech Lite" application demonstrates advanced frontend development skills including real-time data streaming via WebSockets, complex state management, and professional financial data visualization.
 
-![CryptoTycoon](https://img.shields.io/badge/React-18.2-blue) ![WebSockets-Binance-orange) ![lightweight--charts-v5--green)
+![CryptoTycoon](https://img.shields.io/badge/React-18.2-blue) ![WebSockets-Binance-orange](https://img.shields.io/badge/WebSockets-Binance-orange) ![lightweight-charts-v5](https://img.shields.io/badge/lightweight--charts-v5-green)
 
 ## ✨ Core Features
 
 ### 🔴 Real-Time Market Engine
-- **Live Data Streams**: Powered by Binance WebSockets for sub-second price updates.
-- **High Fidelity**: Sub-second price movements and 24-hour change percentages.
+- **Binance WebSocket Integration**: Sub-second price updates for a truly professional feel.
 - **Global Coverage**: Real-time tracking for the top 12 cryptocurrencies by market cap.
+- **High Performance**: Optimized for fast data transformation and rendering.
 
 ### 💼 Portfolio Management & Persistence
-- **LocalStorage Sync**: Your balance, assets, and transactions are automatically saved across sessions.
-- **Advanced Analytics**: Real-time calculation of **Volatility** and **Sharpe Ratio** for your portfolio.
-- **Smart Trading**: Automatic average buy price calculation and instantaneous P&L tracking.
-- **Full History**: Categorized transaction logs with detailed buy/sell metrics.
+- **State-of-the-art Persistence**: Automatic LocalStorage sync for balance, assets, and history.
+- **Advanced Metrics**: Real-time calculation of **Volatility** and **Sharpe Ratio**.
+- **Average Buy Price**: Intelligent tracking of costs across multiple trades.
 
 ### 📊 Professional Analytics Dashboard
-- **Advanced Charting**: Integrated **TradingView Lightweight Charts v5** for professional-grade visualization.
-- **Interactive Views**: Toggle between high-performance Candlestick, Area, and Line charts.
-- **Volume Tracking**: Integrated volume histograms for trend analysis.
-- **Multi-Timeframe**: Analyze market history across 1D, 7D, 30D, and 90D intervals.
-
-### 🎨 Premium UI/UX & Customization
-- **Modern Aesthetic**: Emerald Green and Amber financial theme with glassmorphism effects.
-- **Theme Toggling**: Seamless switching between dedicated Dark and Light modes.
-- **Multi-Currency**: Global support for USD ($), EUR (€), and BTC (₿).
-- **Responsive Mastery**: Fully optimized for mobile, tablet, and desktop viewing.
-- **Leaderboard**: Compete with a simulated global community of professional traders.
+- **TradingView Integration**: Powered by **Lightweight Charts v5** for premium financial visualization.
+- **Interactive Controls**: Seamless switching between Candlestick, Area, and Volume views.
+- **Atmospheric Aesthetic**: High-fidelity **Cyberpunk Dark Mode** with glassmorphism and neon accents.
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18.2 + Vite 5.4
 - **State Management**: React Context API
-- **Styling**: Tailwind CSS 3.4 (Custom Financial Theme)
+- **Styling**: Tailwind CSS 3.4 (Cyberpunk Financial Theme)
 - **Charts**: TradingView Lightweight Charts v5
 - **Data Streams**: Binance WebSocket API
 - **Persistence**: LocalStorage API
@@ -61,11 +52,11 @@ The application will be available at `http://localhost:5173/`
 
 ## 🚀 Usage
 
-1. **Market Watch**: Observe live price action driven by Binance's real-time engine.
-2. **Chart Analysis**: Toggle chart types and timeframes to find market patterns.
-3. **Trade Execution**: Click any asset to open the responsive trade modal.
-4. **Portfolio Tracking**: Monitor your net worth, volatility, and historical performance from the main dashboard.
-5. **Customization**: Switch currencies or toggle themes via the executive header controls.
+1.  **Market Watch**: Observe live price action driven by Binance's real-time engine.
+2.  **Chart Analysis**: Toggle chart types and timeframes to find market patterns.
+3.  **Trade Execution**: Click any asset to open the responsive trade modal.
+4.  **Portfolio Tracking**: Monitor your net worth, volatility, and historical performance from the main dashboard.
+5.  **Customization**: Switch currencies or toggle themes via the executive header controls.
 
 ## 📁 Project Structure
 
@@ -86,8 +77,6 @@ CryptoTycoon-Simulation/
 │   │   └── PriceStreamService.js  # WebSocket management
 │   ├── App.jsx                    # Executive dashboard layout
 │   └── index.css                  # Global styles & Theme overrides
-├── tailwind.config.js
-└── package.json
 ```
 
 ## 📝 License

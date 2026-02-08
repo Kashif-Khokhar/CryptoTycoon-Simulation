@@ -18,8 +18,8 @@ const Background = () => {
       {/* Brand Identity Glows */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyber-green/20 via-transparent to-cyber-amber/20 opacity-60"></div>
       
-      {/* Readability Scrim */}
-      <div className="absolute inset-0 bg-[#020617]/40"></div>
+      {/* Grid Pattern Integration */}
+      <div className="absolute inset-0 bg-grid-cyber opacity-20"></div>
 
       {/* Retro Scanline Pattern */}
       <div className="absolute inset-0 scanlines opacity-10"></div>

@@ -18,8 +18,7 @@ const Dashboard = () => {
   
   const { 
     setMarketPrices, 
-    currency, setCurrency, 
-    theme, setTheme 
+    currency, setCurrency
   } = usePortfolio();
 
   useEffect(() => {
@@ -110,44 +109,48 @@ const Dashboard = () => {
   }
 
   return (
-    <div className={`min-h-screen relative overflow-hidden ${theme === 'light' ? 'bg-slate-50 text-slate-900' : 'bg-cyber-darker text-white'}`}>
+    <div className="min-h-screen relative overflow-hidden bg-cyber-darker text-white">
       <Background />
       <div className="relative z-10 p-4 md:p-6 max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start gap-4">
-          <div>
-            <h1 className="text-3xl md:text-5xl font-bold text-gradient mb-2">CryptoTycoon</h1>
-            <p className={`${theme === 'light' ? 'text-slate-500' : 'text-white/60'} text-base md:text-lg`}>Professional Trading Simulator</p>
+          <div className="flex flex-col gap-1">
+            <h1 className="text-3xl md:text-5xl font-black tracking-tighter flex items-center gap-2">
+              <span className="text-cyber-green drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]">CRYPTO</span>
+              <span className="text-white">TYCOON</span>
+            </h1>
+            <p className="text-white/40 font-semibold tracking-widest text-xs uppercase flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-cyber-green animate-pulse"></span>
+              Real-Time High-Stakes Simulator
+            </p>
           </div>
           
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Currency Selector */}
-            <select 
-              value={currency} 
-              onChange={(e) => setCurrency(e.target.value)}
-              className={`border rounded-lg px-3 py-1.5 text-sm font-semibold outline-none transition-all ${
-                theme === 'light' 
-                  ? 'bg-white border-slate-200 text-slate-900' 
-                  : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
-              }`}
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="BTC">BTC (₿)</option>
-            </select>
-
-            {/* Theme Toggle */}
-            <button 
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg glass-card hover:bg-white/10 text-xl"
-            >
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
-
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-2 glass-card p-1">
+              <button 
+                onClick={() => setCurrency('USD')}
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${currency === 'USD' ? 'bg-cyber-green text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+              >
+                USD
+              </button>
+              <button 
+                onClick={() => setCurrency('EUR')}
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${currency === 'EUR' ? 'bg-cyber-green text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+              >
+                EUR
+              </button>
+              <button 
+                onClick={() => setCurrency('BTC')}
+                className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${currency === 'BTC' ? 'bg-cyber-green text-white shadow-lg' : 'text-white/40 hover:text-white'}`}
+              >
+                BTC
+              </button>
+            </div>
             {isDemoMode && (
-              <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center gap-2">
-                <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-                <span className="text-amber-500 font-semibold text-xs md:text-sm">Demo Mode (API Rate Limited)</span>
+              <div className="px-4 py-2 bg-gradient-to-r from-cyber-amber/20 to-transparent border border-cyber-amber/30 rounded-full">
+                <span className="text-cyber-amber text-xs font-black uppercase tracking-widest animate-pulse">
+                  Simulation Active
+                </span>
               </div>
             )}
           </div>

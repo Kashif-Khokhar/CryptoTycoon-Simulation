@@ -12,7 +12,7 @@ const PortfolioTable = () => {
 
   if (assets.length === 0) {
     return (
-      <div className="glass-card p-12 text-center">
+      <div className="glass-card p-12 text-center text-white">
         <div className="text-5xl mb-4 opacity-20">📥</div>
         <p className="text-white/40 font-semibold italic">Your portfolio is empty. Start trading to see your assets here!</p>
       </div>
@@ -43,7 +43,7 @@ const PortfolioTable = () => {
                 <tr key={asset.id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyber-green to-cyber-amber flex items-center justify-center font-bold text-xs">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyber-green to-cyber-amber flex items-center justify-center font-bold text-xs text-white">
                         {asset.symbol.toUpperCase()}
                       </div>
                       <div>

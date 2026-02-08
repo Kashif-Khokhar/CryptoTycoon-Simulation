@@ -29,7 +29,6 @@ export const PortfolioProvider = ({ children }) => {
   
   const [marketPrices, setMarketPrices] = useState({});
   const [currency, setCurrency] = useState(() => localStorage.getItem('crypto_sim_currency') || 'USD');
-  const [theme, setTheme] = useState(() => localStorage.getItem('crypto_sim_theme') || 'dark');
 
   // Sync state to local storage
   useEffect(() => {
@@ -45,13 +44,9 @@ export const PortfolioProvider = ({ children }) => {
   }, [transactions]);
 
   useEffect(() => {
-    localStorage.setItem('crypto_sim_currency', currency);
-  }, [currency]);
-
-  useEffect(() => {
-    localStorage.setItem('crypto_sim_theme', theme);
-    document.documentElement.classList.toggle('light', theme === 'light');
-  }, [theme]);
+    document.documentElement.classList.remove('light');
+    document.documentElement.classList.add('dark');
+  }, []);
 
   // Calculate total portfolio value
   const calculateNetWorth = () => {
@@ -199,9 +194,7 @@ export const PortfolioProvider = ({ children }) => {
     transactions,
     marketPrices,
     currency,
-    theme,
     setCurrency,
-    setTheme,
     setMarketPrices,
     calculateNetWorth,
     calculateProfitLoss,

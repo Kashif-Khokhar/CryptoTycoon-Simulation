@@ -34,7 +34,7 @@ class ErrorBoundary extends Component {
             A rendering error occurred. This is usually caused by a data initialization issue.
           </p>
           <div style={{
-            background: 'rgba(255, 255, 255, 0.05)',
+            background: 'rgba(255,255,255,0.05)',
             padding: '1rem',
             borderRadius: '0.5rem',
             marginBottom: '2rem',

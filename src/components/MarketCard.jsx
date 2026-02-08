@@ -118,7 +118,7 @@ const MarketCard = ({ crypto }) => {
             <div className="mb-6 glass-card p-4 rounded-lg">
               <div className="flex justify-between mb-2">
                 <span className="text-white/60">Total Cost:</span>
-                <span className="font-bold text-lg">
+                <span className="font-bold text-lg text-white">
                   {getCurrencySymbol()}{(parseFloat(amount || 0) * crypto.current_price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>

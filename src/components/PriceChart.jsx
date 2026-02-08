@@ -56,48 +56,49 @@ const PriceChart = ({ coinId, coinName }) => {
         const volumeData = chartData.map(d => ({
           time: d.time,
           value: Math.random() * 100,
-          color: d.close >= d.open ? 'rgba(0, 255, 136, 0.3)' : 'rgba(255, 0, 110, 0.3)'
+          color: d.close >= d.open ? 'rgba(0,255,136,0.3)' : 'rgba(255,0,110,0.3)'
         }));
 
         chart = createChart(chartContainerRef.current, {
           layout: {
             background: { type: ColorType.Solid, color: 'transparent' },
-            textColor: 'rgba(255, 255, 255, 0.7)',
+            textColor: 'rgba(255,255,255,0.7)',
           },
           grid: {
-            vertLines: { color: 'rgba(255, 255, 255, 0.05)' },
-            horzLines: { color: 'rgba(255, 255, 255, 0.05)' },
+            vertLines: { color: 'rgba(255,255,255,0.05)' },
+            horzLines: { color: 'rgba(255,255,255,0.05)' },
           },
           width: width || 400,
           height: 400,
           timeScale: {
-            borderColor: 'rgba(255, 255, 255, 0.1)',
+            borderColor: 'rgba(255,255,255,0.1)',
             timeVisible: true,
             secondsVisible: false,
           },
         });
 
+        const candlestickSeries = chart.addSeries(CandlestickSeries, {
+          upColor: '#10b981',
+          downColor: '#f43f5e',
+          borderVisible: false,
+          wickUpColor: '#10b981',
+          wickDownColor: '#f43f5e',
+        });
+
+        const areaSeries = chart.addSeries(AreaSeries, {
+          lineColor: '#10b981',
+          topColor: 'rgba(16, 185, 129, 0.4)',
+          bottomColor: 'rgba(16, 185, 129, 0)',
+        });
+
         if (chartType === 'candlestick') {
-          priceSeries = chart.addSeries(CandlestickSeries, {
-            upColor: '#10b981',
-            downColor: '#f43f5e',
-            borderVisible: false,
-            wickUpColor: '#10b981',
-            wickDownColor: '#f43f5e',
-          });
-          priceSeries.setData(chartData);
+          candlestickSeries.setData(chartData);
         } else {
-          priceSeries = chart.addSeries(AreaSeries, {
-            lineColor: '#10b981',
-            topColor: 'rgba(16, 185, 129, 0.4)',
-            bottomColor: 'rgba(16, 185, 129, 0.0)',
-            lineWidth: 2,
-          });
-          priceSeries.setData(chartData.map(d => ({ time: d.time, value: d.close })));
+          areaSeries.setData(chartData.map(d => ({ time: d.time, value: d.close })));
         }
 
         volumeSeries = chart.addSeries(HistogramSeries, {
-          color: 'rgba(38, 166, 154, 0.5)',
+          color: 'rgba(38,166,154,0.5)',
           priceFormat: {
             type: 'volume',
           },
@@ -151,7 +152,7 @@ const PriceChart = ({ coinId, coinName }) => {
     <div className="glass-card p-4 md:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-          <h2 className="text-xl font-bold">{coinName} Market</h2>
+          <h2 className="text-xl font-bold text-white">{coinName} Market</h2>
           <div className="flex gap-2 mt-2">
             <button 
               onClick={() => setChartType('line')}

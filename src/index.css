@@ -17,46 +17,34 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl;
-  }
-
-  .light .glass-card {
-    @apply bg-black/5 border-black/10 shadow-lg;
+    @apply bg-cyber-dark/40 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl;
   }
 
   .glass-card-hover {
-    @apply glass-card transition-all duration-300 hover:bg-white/10 hover:border-cyber-green/30;
+    @apply glass-card hover:bg-white/5 hover:border-white/20 transition-all duration-300;
   }
 
   .glass-card-hover:hover {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    box-shadow: 0 10px 25px -5px rgba(16,185,129,0.1), 0 8px 10px -6px rgba(16,185,129,0.1);
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-cyber-blue to-cyber-purple text-white font-bold py-3 px-6 rounded-xl
-    hover:opacity-90 transition-all active:scale-95 shadow-glow-blue;
+    @apply px-6 py-3 bg-cyber-blue text-white font-bold rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.3)] hover:scale-[1.02] active:scale-95 transition-all;
   }
 
   .btn-primary:hover {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 20px rgba(16,185,129,0.3);
   }
 
   .btn-success {
-    @apply px-6 py-3 rounded-xl font-semibold bg-gradient-profit text-cyber-dark hover:shadow-glow-green transition-all duration-300 transform hover:scale-105;
+    @apply px-6 py-3 bg-cyber-green text-white font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:scale-[1.02] active:scale-95 transition-all;
   }
 
   .btn-danger {
-    @apply px-6 py-3 rounded-xl font-semibold bg-gradient-loss transition-all duration-300 transform hover:scale-105;
-  }
-
-  .btn-danger:hover {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    @apply px-6 py-3 bg-cyber-pink text-white font-bold rounded-xl shadow-[0_0_20px_rgba(244,114,182,0.3)] hover:scale-[1.02] active:scale-95 transition-all;
   }
 
   .cyber-border {
-    @apply border-2 border-transparent bg-clip-padding;
-    background-image: linear-gradient(#0f172a, #0f172a),
-      linear-gradient(135deg, #10b981, #f59e0b);
     background-origin: border-box;
     background-clip: padding-box, border-box;
   }
@@ -89,16 +77,16 @@
   }
 
   .bg-grid-cyber {
-    background-image:
-      linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
   }
 
   .scanlines {
     background: linear-gradient(to bottom,
-        rgba(18, 16, 16, 0) 50%,
-        rgba(0, 0, 0, 0.1) 50%);
+        transparent 50%,
+        rgba(0,0,0,0.3) 50%);
     background-size: 100% 4px;
     pointer-events: none;
   }
