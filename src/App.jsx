@@ -5,6 +5,7 @@ import NetWorthCard from './components/NetWorthCard';
 import MarketCard from './components/MarketCard';
 import PortfolioTable from './components/PortfolioTable';
 import PriceChart from './components/PriceChart';
+import Background from './components/Background';
 
 const Dashboard = () => {
   const [cryptos, setCryptos] = useState([]);
@@ -64,10 +65,13 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-cyber-blue border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-xl text-gradient font-bold">Loading CryptoTycoon...</p>
+      <div className="min-h-screen relative overflow-hidden">
+        <Background />
+        <div className="relative z-10 min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-cyber-green border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-xl text-gradient font-bold">Loading CryptoTycoon...</p>
+          </div>
         </div>
       </div>
     );
@@ -75,41 +79,39 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
-        <div className="glass-card p-8 max-w-md text-center">
-          <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold mb-4 text-gradient">Connection Error</h2>
-          <p className="text-white/80 mb-6">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="btn-success px-6 py-3"
-          >
-            Retry
-          </button>
+      <div className="min-h-screen relative overflow-hidden p-6">
+        <Background />
+        <div className="relative z-10 min-h-screen flex items-center justify-center">
+          <div className="glass-card p-8 max-w-md text-center">
+            <div className="text-6xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold mb-4 text-gradient">Connection Error</h2>
+            <p className="text-white/80 mb-6">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="btn-success px-6 py-3"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-6 relative overflow-hidden bg-cyber-darker">
-      {/* Background Decor - Neutral Slate Glow */}
-      <div className="fixed inset-0 z-[-1]">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-slate-800/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-900/10 rounded-full blur-[120px]"></div>
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+    <div className="min-h-screen relative overflow-hidden">
+      <Background />
+      <div className="relative z-10 p-4 md:p-6 max-w-7xl mx-auto">
         {/* Header */}
-        <header className="mb-8 flex justify-between items-end">
+        <header className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
           <div>
-            <h1 className="text-5xl font-bold text-gradient mb-2">CryptoTycoon</h1>
-            <p className="text-white/60 text-lg">Professional Trading Simulator</p>
+            <h1 className="text-3xl md:text-5xl font-bold text-gradient mb-2">CryptoTycoon</h1>
+            <p className="text-white/60 text-base md:text-lg">Professional Trading Simulator</p>
           </div>
           {isDemoMode && (
-            <div className="bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-lg flex items-center gap-2">
+            <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 md:px-4 md:py-2 rounded-lg flex items-center gap-2">
               <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-              <span className="text-amber-500 font-semibold text-sm">Demo Mode (API Rate Limited)</span>
+              <span className="text-amber-500 font-semibold text-xs md:text-sm">Demo Mode (API Rate Limited)</span>
             </div>
           )}
         </header>

@@ -20,16 +20,16 @@ const NetWorthCard = () => {
         </span>
       </div>
       
-      <div className="mt-6 grid grid-cols-2 gap-4">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="glass-card p-4">
           <p className="text-sm text-white/60 mb-1">Cash Balance</p>
-          <p className="text-2xl font-bold text-cyber-blue">
+          <p className="text-2xl font-bold text-cyber-green">
             ${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
         <div className="glass-card p-4">
           <p className="text-sm text-white/60 mb-1">Assets Value</p>
-          <p className="text-2xl font-bold text-cyber-purple">
+          <p className="text-2xl font-bold text-cyber-amber">
             ${(netWorth - balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>

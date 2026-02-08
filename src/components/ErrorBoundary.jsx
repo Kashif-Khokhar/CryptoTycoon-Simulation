@@ -42,7 +42,7 @@ class ErrorBoundary extends Component {
             overflow: 'auto',
             textAlign: 'left'
           }}>
-            <code style={{ fontSize: '0.9rem', color: '#00d4ff' }}>
+            <code style={{ fontSize: '0.9rem', color: '#10b981' }}>
               {this.state.error && this.state.error.toString()}
             </code>
           </div>
@@ -50,7 +50,7 @@ class ErrorBoundary extends Component {
             onClick={() => window.location.reload()}
             style={{
               padding: '0.75rem 1.5rem',
-              background: 'linear-gradient(to right, #00d4ff, #b829f5)',
+              background: 'linear-gradient(to right, #10b981, #f59e0b)',
               border: 'none',
               borderRadius: '0.5rem',
               color: 'white',

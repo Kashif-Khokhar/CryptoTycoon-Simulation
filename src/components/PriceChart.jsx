@@ -94,8 +94,8 @@ const PriceChart = ({ coinId, coinName }) => {
         intersect: false,
         backgroundColor: 'rgba(10, 14, 39, 0.9)',
         titleColor: '#fff',
-        bodyColor: '#00d4ff',
-        borderColor: '#00d4ff',
+        bodyColor: '#10b981',
+        borderColor: '#10b981',
         borderWidth: 1,
         padding: 12,
         displayColors: false,
@@ -138,17 +138,17 @@ const PriceChart = ({ coinId, coinName }) => {
   };
 
   return (
-    <div className="glass-card p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="glass-card p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-xl font-bold">{coinName} Price Chart</h2>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {[1, 7, 30, 90].map(days => (
             <button
               key={days}
               onClick={() => setTimeframe(days)}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 timeframe === days 
-                  ? 'bg-gradient-to-r from-cyber-blue to-cyber-purple text-white' 
+                  ? 'bg-gradient-to-r from-cyber-green to-cyber-amber text-white' 
                   : 'glass-card hover:bg-white/10'
               }`}
             >
@@ -158,10 +158,10 @@ const PriceChart = ({ coinId, coinName }) => {
         </div>
       </div>
       
-      <div className="h-80">
+      <div className="h-64 md:h-80">
         {loading ? (
           <div className="flex items-center justify-center h-full">
-            <div className="animate-pulse text-cyber-blue text-lg">Loading chart...</div>
+            <div className="animate-pulse text-cyber-green text-lg">Loading chart...</div>
           </div>
         ) : error ? (
           <div className="flex items-center justify-center h-full text-white/60">
@@ -169,7 +169,7 @@ const PriceChart = ({ coinId, coinName }) => {
               <p className="mb-2">⚠️ {error}</p>
               <button 
                 onClick={() => window.location.reload()} 
-                className="text-cyber-blue hover:underline text-sm"
+                className="text-cyber-green hover:underline text-sm"
               >
                 Retry
               </button>

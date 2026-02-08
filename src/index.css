@@ -4,11 +4,8 @@
 
 @layer base {
   body {
-    @apply bg-cyber-darker text-white;
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-    background-size: 40px 40px;
+    @apply text-white;
+    background-color: transparent;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
@@ -25,11 +22,19 @@
   }
 
   .glass-card-hover {
-    @apply glass-card transition-all duration-300 hover:bg-white/10 hover:border-cyber-blue/30 hover:shadow-glow-blue;
+    @apply glass-card transition-all duration-300 hover:bg-white/10 hover:border-cyber-green/30;
+  }
+
+  .glass-card-hover:hover {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
   }
 
   .btn-primary {
-    @apply px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-cyber-blue to-cyber-purple hover:shadow-glow-purple transition-all duration-300 transform hover:scale-105;
+    @apply px-6 py-3 rounded-xl font-semibold bg-gradient-to-r from-cyber-green to-cyber-amber transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
   }
 
   .btn-success {
@@ -37,13 +42,17 @@
   }
 
   .btn-danger {
-    @apply px-6 py-3 rounded-xl font-semibold bg-gradient-loss hover:shadow-glow-purple transition-all duration-300 transform hover:scale-105;
+    @apply px-6 py-3 rounded-xl font-semibold bg-gradient-loss transition-all duration-300 transform hover:scale-105;
+  }
+
+  .btn-danger:hover {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
   }
 
   .cyber-border {
     @apply border-2 border-transparent bg-clip-padding;
     background-image: linear-gradient(#0f172a, #0f172a),
-      linear-gradient(135deg, #00d4ff, #a855f7);
+      linear-gradient(135deg, #10b981, #f59e0b);
     background-origin: border-box;
     background-clip: padding-box, border-box;
   }
@@ -51,7 +60,7 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyber-blue to-cyber-purple;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyber-green to-cyber-amber;
   }
 
   .text-profit {
@@ -60,5 +69,67 @@
 
   .text-loss {
     @apply text-cyber-pink;
+  }
+
+  /* Enhanced Background Utilities */
+  .animate-slow-drift {
+    animation: drift 20s infinite linear;
+  }
+
+  .animate-slow-drift-reverse {
+    animation: drift-reverse 25s infinite linear;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-glow 8s infinite ease-in-out;
+  }
+
+  .bg-grid-cyber {
+    background-image:
+      linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .scanlines {
+    background: linear-gradient(to bottom,
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+  }
+
+  @keyframes drift {
+    from {
+      transform: translate(0, 0) rotate(0deg);
+    }
+
+    to {
+      transform: translate(100px, 100px) rotate(360deg);
+    }
+  }
+
+  @keyframes drift-reverse {
+    from {
+      transform: translate(0, 0) rotate(0deg);
+    }
+
+    to {
+      transform: translate(-100px, -50px) rotate(-360deg);
+    }
+  }
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 0.1;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.3;
+      transform: scale(1.2);
+    }
   }
 }

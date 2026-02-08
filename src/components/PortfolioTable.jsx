@@ -13,19 +13,22 @@ const PortfolioTable = () => {
   }
 
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-white/10">
-              <th className="text-left p-4 text-white/60 font-semibold">Asset</th>
-              <th className="text-right p-4 text-white/60 font-semibold">Quantity</th>
-              <th className="text-right p-4 text-white/60 font-semibold">Avg. Buy Price</th>
-              <th className="text-right p-4 text-white/60 font-semibold">Current Price</th>
-              <th className="text-right p-4 text-white/60 font-semibold">Total Value</th>
-              <th className="text-right p-4 text-white/60 font-semibold">Profit/Loss</th>
-            </tr>
-          </thead>
+    <div className="glass-card p-4 md:p-6 overflow-hidden">
+      <h2 className="text-xl font-bold mb-6">Your Portfolio</h2>
+      
+      <div className="overflow-x-auto -mx-4 md:mx-0">
+        <div className="inline-block min-w-full align-middle">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="p-4 text-white/40 font-medium text-sm md:text-base whitespace-nowrap">Asset</th>
+                <th className="text-right p-4 text-white/40 font-medium text-sm md:text-base whitespace-nowrap">Quantity</th>
+                <th className="text-right p-4 text-white/40 font-medium text-sm md:text-base whitespace-nowrap">Avg. Buy Price</th>
+                <th className="text-right p-4 text-white/40 font-medium text-sm md:text-base whitespace-nowrap">Current Price</th>
+                <th className="text-right p-4 text-white/40 font-medium text-sm md:text-base whitespace-nowrap">Total Value</th>
+                <th className="text-right p-4 text-white/40 font-medium text-sm md:text-base whitespace-nowrap">Profit/Loss</th>
+              </tr>
+            </thead>
           <tbody>
             {assets.map((asset) => {
               const currentPrice = marketPrices[asset.id] || 0;
@@ -36,22 +39,25 @@ const PortfolioTable = () => {
               return (
                 <tr key={asset.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="p-4">
-                    <div>
-                      <p className="font-bold">{asset.name}</p>
-                      <p className="text-sm text-white/60">{asset.symbol.toUpperCase()}</p>
+                    <div className="flex items-center gap-3">
+                      <img src={asset.image} alt={asset.name} className="w-8 h-8 rounded-full" />
+                      <div>
+                        <div className="font-bold text-white whitespace-nowrap">{asset.name}</div>
+                        <div className="text-xs text-white/40 uppercase tracking-wider">{asset.symbol}</div>
+                      </div>
                     </div>
                   </td>
-                  <td className="text-right p-4 font-semibold">{asset.quantity.toFixed(6)}</td>
-                  <td className="text-right p-4 text-white/80">
+                  <td className="text-right p-4 text-white/80 whitespace-nowrap font-mono">{asset.quantity.toFixed(6)}</td>
+                  <td className="text-right p-4 text-white/80 whitespace-nowrap">
                     ${asset.avgBuyPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td className="text-right p-4 font-semibold text-cyber-blue">
+                  <td className="text-right p-4 font-semibold text-cyber-green whitespace-nowrap">
                     ${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td className="text-right p-4 font-bold">
+                  <td className="text-right p-4 font-bold text-white whitespace-nowrap">
                     ${totalValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td className={`text-right p-4 font-bold ${isProfit ? 'text-profit' : 'text-loss'}`}>
+                  <td className={`text-right p-4 font-bold whitespace-nowrap ${isProfit ? 'text-profit' : 'text-loss'}`}>
                     {isProfit ? '+' : ''}${profitLoss.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     <br />
                     <span className="text-sm">
@@ -61,8 +67,9 @@ const PortfolioTable = () => {
                 </tr>
               );
             })}
-          </tbody>
-        </table>
+              </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
