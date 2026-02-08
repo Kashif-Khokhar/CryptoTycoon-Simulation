@@ -5,18 +5,23 @@
 @layer base {
   body {
     @apply bg-cyber-darker text-white;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 40px 40px;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
-    box-shadow: 0 8px 32px 0 rgba(0, 212, 255, 0.1);
+    @apply bg-slate-900/40 backdrop-blur-2xl border border-white/5 rounded-2xl;
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
   }
 
   .glass-card-hover {
@@ -37,8 +42,8 @@
 
   .cyber-border {
     @apply border-2 border-transparent bg-clip-padding;
-    background-image: linear-gradient(#0a0e27, #0a0e27),
-      linear-gradient(135deg, #00d4ff, #b829f5);
+    background-image: linear-gradient(#0f172a, #0f172a),
+      linear-gradient(135deg, #00d4ff, #a855f7);
     background-origin: border-box;
     background-clip: padding-box, border-box;
   }

@@ -11,16 +11,18 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCrypto, setSelectedCrypto] = useState(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
   const portfolio = usePortfolio();
   const setMarketPrices = portfolio?.setMarketPrices;
 
-  console.log('Dashboard Rendering', { loading, error, hasPortfolio: !!portfolio });
+  console.log('Dashboard Rendering', { loading, error, hasPortfolio: !!portfolio, isDemoMode });
 
   useEffect(() => {
     const loadCryptos = async () => {
       try {
         const data = await fetchTopCryptos(12);
         setCryptos(data);
+        setIsDemoMode(data[0]?.isMock || false);
         setSelectedCrypto(data[0]); // Default to Bitcoin
         
         // Update market prices in context
@@ -40,23 +42,22 @@ const Dashboard = () => {
 
     loadCryptos();
 
-    // Poll for price updates every 30 seconds
+    // Poll for price updates every 60 seconds (reduced frequency to avoid rate limits)
     const interval = setInterval(async () => {
       try {
         const data = await fetchTopCryptos(12);
         setCryptos(data);
+        setIsDemoMode(data[0]?.isMock || false);
         
         const prices = {};
         data.forEach(crypto => {
           prices[crypto.id] = crypto.current_price;
         });
         setMarketPrices(prices);
-        setError(null);
       } catch (error) {
         console.error('Error updating prices:', error);
-        // Don't set error state for background updates to avoid disrupting UX
       }
-    }, 30000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [setMarketPrices]);
@@ -91,12 +92,26 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen p-6 relative overflow-hidden bg-cyber-darker">
+      {/* Background Decor - Neutral Slate Glow */}
+      <div className="fixed inset-0 z-[-1]">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-slate-800/10 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-900/10 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <header className="mb-8">
-          <h1 className="text-5xl font-bold text-gradient mb-2">CryptoTycoon</h1>
-          <p className="text-white/60 text-lg">Professional Trading Simulator</p>
+        <header className="mb-8 flex justify-between items-end">
+          <div>
+            <h1 className="text-5xl font-bold text-gradient mb-2">CryptoTycoon</h1>
+            <p className="text-white/60 text-lg">Professional Trading Simulator</p>
+          </div>
+          {isDemoMode && (
+            <div className="bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-lg flex items-center gap-2">
+              <span className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+              <span className="text-amber-500 font-semibold text-sm">Demo Mode (API Rate Limited)</span>
+            </div>
+          )}
         </header>
 
         {/* Net Worth Card */}

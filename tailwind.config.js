@@ -8,12 +8,12 @@ export default {
         extend: {
             colors: {
                 cyber: {
-                    dark: '#0a0e27',
-                    darker: '#050816',
-                    blue: '#00d4ff',
-                    purple: '#b829f5',
-                    pink: '#ff006e',
-                    green: '#00ff88',
+                    dark: '#0f172a', // slate-900
+                    darker: '#020617', // slate-950
+                    blue: '#00d4ff', // cyan-400
+                    purple: '#a855f7', // purple-500
+                    pink: '#f43f5e', // rose-500
+                    green: '#10b981', // emerald-500
                 }
             },
             backgroundImage: {
