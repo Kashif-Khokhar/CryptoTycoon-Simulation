@@ -1,52 +1,44 @@
 # 🚀 CryptoTycoon - Professional Trading Simulator
 
-A professional-grade cryptocurrency trading simulator built with React and Vite. This "FinTech Lite" application demonstrates advanced frontend development skills including real-time data streaming, complex state management, and interactive data visualization.
+A professional-grade cryptocurrency trading simulator built with React and Vite. This "FinTech Lite" application demonstrates advanced frontend development skills including real-time data streaming via WebSockets, complex state management, and professional financial data visualization.
 
-![CryptoTycoon](https://img.shields.io/badge/React-18.2-blue) ![Vite](https://img.shields.io/badge/Vite-5.0-purple) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-cyan)
+![CryptoTycoon](https://img.shields.io/badge/React-18.2-blue) ![WebSockets-Binance-orange) ![lightweight--charts-v5--green)
 
-🔗 **Live Demo**: [https://crypto-tycoon-simulation.vercel.app/](https://crypto-tycoon-simulation.vercel.app/)
+## ✨ Core Features
 
-## ✨ Features
+### 🔴 Real-Time Market Engine
+- **Live Data Streams**: Powered by Binance WebSockets for sub-second price updates.
+- **High Fidelity**: Sub-second price movements and 24-hour change percentages.
+- **Global Coverage**: Real-time tracking for the top 12 cryptocurrencies by market cap.
 
-### 🔴 Live Market Engine
-- Real-time cryptocurrency prices from CoinGecko API
-- Auto-refresh every 30 seconds
-- Top 12 cryptocurrencies by market cap
-- 24-hour price change indicators
+### 💼 Portfolio Management & Persistence
+- **LocalStorage Sync**: Your balance, assets, and transactions are automatically saved across sessions.
+- **Advanced Analytics**: Real-time calculation of **Volatility** and **Sharpe Ratio** for your portfolio.
+- **Smart Trading**: Automatic average buy price calculation and instantaneous P&L tracking.
+- **Full History**: Categorized transaction logs with detailed buy/sell metrics.
 
-### 💼 Portfolio Management
-- Start with $10,000 virtual USD
-- Buy and sell cryptocurrencies
-- Automatic average buy price calculation
-- Real-time profit/loss tracking
-- Complete transaction history
+### 📊 Professional Analytics Dashboard
+- **Advanced Charting**: Integrated **TradingView Lightweight Charts v5** for professional-grade visualization.
+- **Interactive Views**: Toggle between high-performance Candlestick, Area, and Line charts.
+- **Volume Tracking**: Integrated volume histograms for trend analysis.
+- **Multi-Timeframe**: Analyze market history across 1D, 7D, 30D, and 90D intervals.
 
-### 📊 Analytical Dashboard
-- **Net Worth Tracking**: Total portfolio value with P&L
-- **Asset Breakdown**: Cash vs invested capital
-- **Portfolio Table**: Detailed holdings with performance metrics
-- **Interactive Charts**: Multiple timeframes (1D, 7D, 30D, 90D)
-
-### 🎨 Premium UI/UX
-- Cyberpunk-themed glassmorphism design
-- Smooth animations and transitions
-- Responsive layout (mobile, tablet, desktop)
-- Interactive trading modals
-- Real-time visual feedback
-
-### 🛡️ Reliability & Stability
-- **Global Error Boundary**: Catch and display rendering crashes gracefully
-- **API Resilience**: Defensive handling for CoinGecko rate limits and connection failures
-- **Robust State Initialization**: Prevents white screen issues during initial data fetch
-- **Clear Error Messaging**: Detailed connection error UI with built-in retry mechanisms
+### 🎨 Premium UI/UX & Customization
+- **Modern Aesthetic**: Emerald Green and Amber financial theme with glassmorphism effects.
+- **Theme Toggling**: Seamless switching between dedicated Dark and Light modes.
+- **Multi-Currency**: Global support for USD ($), EUR (€), and BTC (₿).
+- **Responsive Mastery**: Fully optimized for mobile, tablet, and desktop viewing.
+- **Leaderboard**: Compete with a simulated global community of professional traders.
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18.2 + Vite 5.4
-- **State Management**: Context API
-- **Styling**: Tailwind CSS 3.4 (Custom Cyberpunk Theme)
-- **Charts**: Chart.js 4.4 + react-chartjs-2
-- **API**: CoinGecko REST API
+- **State Management**: React Context API
+- **Styling**: Tailwind CSS 3.4 (Custom Financial Theme)
+- **Charts**: TradingView Lightweight Charts v5
+- **Data Streams**: Binance WebSocket API
+- **Persistence**: LocalStorage API
+- **API**: CoinGecko REST API (for historical data)
 - **HTTP Client**: Axios 1.6
 
 ## 📦 Installation
@@ -69,12 +61,11 @@ The application will be available at `http://localhost:5173/`
 
 ## 🚀 Usage
 
-1. **View Live Market**: Browse top cryptocurrencies with real-time prices
-2. **Trade**: Click any crypto card to open the trading modal
-3. **Buy**: Enter amount and confirm purchase
-4. **Sell**: Switch to sell mode and liquidate holdings
-5. **Track Performance**: Monitor your net worth and profit/loss in real-time
-6. **Analyze**: View price charts with multiple timeframes
+1. **Market Watch**: Observe live price action driven by Binance's real-time engine.
+2. **Chart Analysis**: Toggle chart types and timeframes to find market patterns.
+3. **Trade Execution**: Click any asset to open the responsive trade modal.
+4. **Portfolio Tracking**: Monitor your net worth, volatility, and historical performance from the main dashboard.
+5. **Customization**: Switch currencies or toggle themes via the executive header controls.
 
 ## 📁 Project Structure
 
@@ -82,87 +73,22 @@ The application will be available at `http://localhost:5173/`
 CryptoTycoon-Simulation/
 ├── src/
 │   ├── components/
-│   │   ├── ErrorBoundary.jsx      # Global crash protection
-│   │   ├── NetWorthCard.jsx      # Portfolio dashboard
-│   │   ├── MarketCard.jsx         # Crypto market cards
-│   │   ├── PortfolioTable.jsx     # Holdings table
-│   │   └── PriceChart.jsx         # Price visualization
+│   │   ├── Background.jsx         # Professional financial backdrop
+│   │   ├── Leaderboard.jsx        # Simulated global rankings
+│   │   ├── NetWorthCard.jsx       # Advanced portfolio analytics
+│   │   ├── MarketCard.jsx         # Real-time asset cards
+│   │   ├── PortfolioTable.jsx     # Responsive holdings grid
+│   │   └── PriceChart.jsx         # Lightweight-charts v5 implementation
 │   ├── context/
-│   │   └── PortfolioContext.jsx   # Global state
+│   │   └── PortfolioContext.jsx   # Global state & LocalStorage sync
 │   ├── services/
-│   │   └── api.js                 # API integration
-│   ├── App.jsx                    # Main dashboard layout
-│   ├── main.jsx                   # Application entry
-│   └── index.css                  # Global styles & Tailwind
-├── index.html
-├── vite.config.js
+│   │   ├── api.js                 # REST API integration
+│   │   └── PriceStreamService.js  # WebSocket management
+│   ├── App.jsx                    # Executive dashboard layout
+│   └── index.css                  # Global styles & Theme overrides
 ├── tailwind.config.js
-├── postcss.config.js
 └── package.json
 ```
-
-## 🎯 Key Features Explained
-
-### Transaction Logic
-
-**Buy**: 
-- Validates sufficient balance
-- Calculates weighted average buy price for multiple purchases
-- Updates portfolio automatically
-
-**Sell**:
-- Validates sufficient holdings
-- Calculates profit/loss based on average buy price
-- Removes asset when fully liquidated
-
-### State Management
-
-Uses React Context API to manage:
-- User balance
-- Asset holdings
-- Transaction history
-- Market prices
-- Derived calculations (net worth, P&L)
-
-### API Integration & Error Handling
-
-- Fetches top cryptocurrencies on load and polls every 30s
-- Retrieves historical data for charts
-- **New**: Advanced error handling with custom `ErrorBoundary` component
-- **New**: Graceful degradation when API rate limits are hit
-
-## 🎨 Design System
-
-### Color Palette
-- **Background**: Deep space dark (#050816)
-- **Primary**: Cyber blue (#00d4ff)
-- **Secondary**: Neon purple (#b829f5)
-- **Profit**: Electric green (#00ff88)
-- **Loss**: Hot pink (#ff006e)
-
-### Components
-- Glassmorphism cards with backdrop blur
-- Gradient buttons with hover effects
-- Animated loading states
-- Responsive grid layouts
-
-## 📈 Performance
-
-- Optimized re-renders with React hooks
-- Memoized expensive calculations
-- Efficient polling mechanism
-- Lazy loading for chart data
-- Defensive prop-drilling prevention via Context API
-
-## 🔮 Future Enhancements
-
-- [ ] WebSocket for real-time prices
-- [ ] LocalStorage persistence
-- [ ] Advanced charts (candlesticks, volume)
-- [ ] Portfolio analytics (Sharpe ratio, volatility)
-- [ ] Leaderboard system
-- [ ] Multi-currency support
-- [ ] Dark/light theme toggle
 
 ## 📝 License
 
@@ -173,13 +99,11 @@ MIT License - feel free to use this project for learning and portfolio purposes.
 **Kashif Khokhar**
 
 This project demonstrates proficiency in:
-- Modern React development
-- Asynchronous data handling
-- Complex state management
-- API integration
-- Data visualization
-- Responsive UI/UX design
+- **Real-time Financial Systems** (WebSockets)
+- **Professional Data Visualization** (Lightweight Charts)
+- **Complex State Management** (Context + Persistence)
+- **Full-Spectrum UI/UX** (Responsive Design + Theme Engines)
 
 ---
 
-**Note**: This is a simulation using virtual currency. No real cryptocurrency transactions occur.
+**Disclaimer**: This is a simulator using virtual currency. No real cryptocurrency transactions or financial risks are involved.
